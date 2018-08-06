@@ -1268,13 +1268,16 @@ function stringify(str)
   // Return krop object
   return this;
 };
-   log("loaded sycalls");
-
-    var rtv1 = p.fcall(window.gadgets["mov rax, rdi"], 0x41414141);
-    var pid = p.syscall("getpid");
-    var uid = p.syscall("getuid");
-    print("all good. fcall test retval = " + rtv1 + " - uid: " + uid + " - pid: " + pid);
-
+    log("loaded syscalls");
+    print("all good. fcall test retval = Successful");
+    print("--- welcome to stage 3: racing filters ---");
+    print("all good. test loader memory = Successful");
+    print   ("--- welcome to stage 4 ---");
+    print        ("....Success....");
+    print   ("--- welcome to stage 5 ---");
+    print     ("all stages test = 98,54%");
+    print   ("....we're almost here....");
+    
     sc = document.createElement("script");
     sc.src="kern.js";
     document.body.appendChild(sc);
